@@ -2,6 +2,7 @@ import java.util.Scanner;
 
 public class SPBUMain {
     public static void main(String[] args) {
+        AntrianKendaraanLinkedList antrianKendaraan = new AntrianKendaraanLinkedList();
         QueueTransaksi queueTransaksi = new QueueTransaksi(50);
         Scanner scanner = new Scanner(System.in);
 
@@ -29,12 +30,24 @@ public class SPBUMain {
                     String merk = scanner.nextLine();
                     
                     Kendaraan kendaraan = new Kendaraan(platNomor, tipe, merk);
+                    antrianKendaraan.tambahAntrian(kendaraan);
                     break;
                 case 2:
+                    antrianKendaraan.tampilkanAntrian();
                     break;
                 case 3:
+                    System.out.println(">> Jumlah kendaraan dalam antrian: " + antrianKendaraan.cekJumlahAntrian());
                     break;
                 case 4:
+                    if (antrianKendaraan.isEmpty()) {
+                        System.out.println("Tidak ada kendaraan dalam antrian.");
+                        return;
+                    }
+                    
+                    Kendaraan kendaraanDilayani = antrianKendaraan.layaniKendaraan();
+                    System.out.println("Petugas melayani " + kendaraanDilayani.platNomor);
+                    kendaraanDilayani.tampilkanInformasi();
+                    
                     System.out.print("Masukkan Jenis BBM: ");
                     String jenisBBM = scanner.nextLine();
                     
@@ -46,6 +59,8 @@ public class SPBUMain {
                     scanner.nextLine();
                     
                     BBM bbm = new BBM(jenisBBM, hargaPerLiter);
+                    TransaksiPengisian transaksi = new TransaksiPengisian(kendaraanDilayani, bbm, jumlahLiter);
+                    queueTransaksi.tambahTransaksi(transaksi);
                     break;
                 case 5:
                     queueTransaksi.tampilkanRiwayatTransaksi();
